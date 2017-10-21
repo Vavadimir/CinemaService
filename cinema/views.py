@@ -1,9 +1,9 @@
 from django.shortcuts import render
-#from .models import Film
+from .models import Film, Poster
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import generics, status
-from cinema.serializers import UserSerializer, FilmSerializer
+from cinema.serializers import UserSerializer, FilmSerializer, PosterSerializer
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -65,12 +65,36 @@ class FilmDetail(APIView):
             serializer = FilmSerializer(data=request.POST)
             if serializer.is_valid():
                 serializer.save()
-                print(serializer)
                 return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse(serializer.errors)
         else:
             return HttpResponse(status=403)
+
+    def get_object(self, id):
+        try:
+            return Film.objects.filter(id=id)
+        except Film.DoesNotExist:
+            HttpResponse(status=404)
+
+    def get(self, request, id):
+        film = self.get_object(id)
+        serializer = FilmSerializer(film, many=False)
+        return JsonResponse(serializer.data, safe=False)
+
+    def put(self, request, id):
+        film = self.get_object(id)
+        serializer = FilmSerializer(film, data=request.PUT)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return JsonResponse(serializer.errors)
+
+    def delete(self, request, id):
+        poster = self.get_object(id)
+        poster.delete()
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
 
 class PosterList(APIView):
@@ -79,5 +103,37 @@ class PosterList(APIView):
     @permission_classes((IsAuthenticated, IsAdminUser))
     def post(self, request):
         print(request.FILES)
-        print(request.POST)
-        return HttpResponse(status=200)
+        try:
+            film = Film.objects.filter(title=request.POST['title'], premiere_date=request.POST['premiere_date'])[0]
+        except Film.DoesNotExist:
+            return HttpResponse(status=404)
+        Poster.objects.create(film=film, pic=request.FILES['file'])
+        response_dict = {
+            'message': 'Poster uploaded successfully!',
+        }
+        return JsonResponse(response_dict)
+
+    def get(self, request, id):
+        film = self.get_object(id)
+        serializer = PosterSerializer(Poster.objects.filter(film=film), many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    def get_object(self, id):
+        try:
+            return Poster.objects.filter(id=id)
+        except Poster.DoesNotExist:
+            HttpResponse(status=404)
+
+    def put(self, request, id):
+        poster = self.get_object(id)
+        serializer = PosterSerializer(poster, data=request.PUT)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return JsonResponse(serializer.errors)
+
+    def delete(self, request, id):
+        poster = self.get_object(id)
+        poster.delete()
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)

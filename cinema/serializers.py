@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import Film
+from .models import Film, Poster
 from rest_framework import serializers
 
 
@@ -12,4 +12,10 @@ class UserSerializer(serializers.ModelSerializer):
 class FilmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Film
-        fields = ('title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price')
+        fields = ('id', 'title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price')
+
+
+class PosterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poster
+        fields = ('film', 'pic', 'is_main')

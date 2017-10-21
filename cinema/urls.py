@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'admin_check/', admin_check),
     url(r'reg_form/', reg_form),
     url(r'film/', FilmDetail.as_view()),
+    url(r'poster/(?P<id>[0-9]+)/', PosterList.as_view()),
     url(r'poster', PosterList.as_view(), name='poster'),
     url(r'^.*$', index),
     #url(r'^.*$', TemplateView.as_view(template_name='index.html')),
