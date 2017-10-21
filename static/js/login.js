@@ -12,6 +12,7 @@ $(document).ready(function() {
        auth.show();
    });
 
+
    $('#log_out').on('click', function(){
        window.localStorage.removeItem('token');
        window.localStorage.removeItem('username');
@@ -19,11 +20,17 @@ $(document).ready(function() {
        $('#log_jwt').show();
        $('#log_out').hide();
        $('#reg_user').show();
+       $('#add_film_button').hide();
    });
 
    $('#reg_user').on('click', function(){
            $('#main-page').hide();
            $('#reg_cont').show();
+   });
+
+   $('#add_film_button').on('click', function(){
+           $('#main-page').hide();
+           $('#post_cont').show();
    });
 
    $('#reg_form').on('submit', function(e){

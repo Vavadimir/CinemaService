@@ -15,7 +15,8 @@
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{% static 'css/for-main.css' %}" rel="stylesheet">'
+    <link href="{% static 'css/for-main.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/dropzone.css' %}" rel="stylesheet">
 
 
   </head>
@@ -44,7 +45,7 @@
               <a class="nav-link" id="reg_user" style="display: none">Register</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="add_film_button" style="display: none">Add film</a>
+              <a class="nav-link" id="add_film_button" style="display: none">Add film</a>
             </li>
           </ul>
             <form id="auth_form" style="display: none">
@@ -112,7 +113,30 @@
             <label>password: <input type="password" id="pass_reg" required></label>
             <label>email: <input type="email" id="email_reg" required></label>
         <button type="submit">register</button>
-</form>
+    </form>
+    </div>
+    <div class="container" id="post_cont" style="display: none">
+        <form id="post_form">
+            {% csrf_token %}
+                    <p><label>Title: <input type="text" name="title"></label></p>
+                    <p><label>Description: <textarea name="description"></textarea></label></p>
+                    <p><label>Genre: <input type="text" name="genre"></label></p>
+                    <p><label>Date of starting: <input type="date" name="premiere_date"></label></p>
+                    <p><label>Session time: <input type="time" name="session_time" required></label></p>
+                    <p><label>Duration:
+                        <input type="range" name="film_duration" id="duration-range" min="0" max="1440" step="15" required>
+                    </label>
+                    <span id="duration-text"></span></p>
+                    <p><label>Price: <input type="number" name="price" id="price_field" required></label></p>
+        </form>
+            <form class="dropzone" id="post_img" method="post">
+                {% csrf_token %}
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                        </div>
+            </form>
+            <input type="button" value="Add" id="submit_post" />
+            <button id="clear-dropzone">Clear</button>
     </div>
     <!-- /.container -->
 
@@ -128,8 +152,16 @@
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Js for project -->
     <script src="{% static 'js/login.js' %}"></script>
     <script src="{% static 'js/check_token.js' %}"></script>
+    <script src="{% static 'vendor/dropzone.js' %}"></script>
+    <script src="{% static 'js/post_form.js' %}"></script>
+    <!-- Dropzone conf for drag-n-drop field -->
+    <script type="text/javascript" src="{% static 'js/post_image.js' %}">
+
+    </script>
   </body>
 
 </html>

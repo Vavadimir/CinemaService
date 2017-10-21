@@ -1,8 +1,9 @@
 from django.shortcuts import render
 #from .models import Film
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
 from rest_framework import generics, status
-from cinema.serializers import UserSerializer
+from cinema.serializers import UserSerializer, FilmSerializer
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -51,3 +52,32 @@ def reg_form(request):
             return JsonResponse(serializer.errors)
 
 
+class FilmDetail(APIView):
+
+    @authentication_classes((JSONWebTokenAuthentication,))
+    @permission_classes((IsAuthenticated, IsAdminUser))
+    def post(self, request):
+        jwts = request.META['HTTP_AUTHORIZATION'][4:]
+        jwt_decoded = jwt.decode(jwts, 'secret', algorithms=['HS256'], verify=False)
+        curr_user = User.objects.filter(username=jwt_decoded['username'])[0]
+        print(request.FILES)
+        if curr_user.is_staff:
+            serializer = FilmSerializer(data=request.POST)
+            if serializer.is_valid():
+                serializer.save()
+                print(serializer)
+                return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return JsonResponse(serializer.errors)
+        else:
+            return HttpResponse(status=403)
+
+
+class PosterList(APIView):
+
+    @authentication_classes((JSONWebTokenAuthentication,))
+    @permission_classes((IsAuthenticated, IsAdminUser))
+    def post(self, request):
+        print(request.FILES)
+        print(request.POST)
+        return HttpResponse(status=200)
