@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
 #from cinema.views import UserListAPIView, film_list, index, film_detail
-from cinema.views import index, UserListAPIView, admin_check, reg_form, FilmDetail, PosterList
+from cinema.views import index, UserListAPIView, admin_check, reg_form, FilmDetail, PosterList, FilmList
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 
@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'users/', UserListAPIView.as_view()),
     url(r'admin_check/', admin_check),
     url(r'reg_form/', reg_form),
+    url(r'film_list/', FilmList.as_view()),
     url(r'film/(?P<id>[0-9]+)/', FilmDetail.as_view()),
     url(r'film/', FilmDetail.as_view()),
     url(r'poster/(?P<id>[0-9]+)/', PosterList.as_view()),
