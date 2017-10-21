@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'users/', UserListAPIView.as_view()),
     url(r'admin_check/', admin_check),
     url(r'reg_form/', reg_form),
+    url(r'film/(?P<id>[0-9]+)/', FilmDetail.as_view()),
     url(r'film/', FilmDetail.as_view()),
     url(r'poster/(?P<id>[0-9]+)/', PosterList.as_view()),
     url(r'poster', PosterList.as_view(), name='poster'),

@@ -73,7 +73,7 @@ class FilmDetail(APIView):
 
     def get_object(self, id):
         try:
-            return Film.objects.filter(id=id)
+            return Film.objects.filter(id=id)[0]
         except Film.DoesNotExist:
             HttpResponse(status=404)
 
