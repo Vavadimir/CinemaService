@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Film, Poster
+from .models import Film, Poster, BookedPlace
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import generics, status
-from cinema.serializers import UserSerializer, FilmSerializer, PosterSerializer, FilmListSerializer
+from cinema.serializers import UserSerializer, FilmSerializer, PosterSerializer, FilmListSerializer, BookedPlaceSerializer
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes, authentication_classes
@@ -148,3 +148,27 @@ class PosterList(APIView):
         poster = self.get_object(id)
         poster.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+
+class BookedPlaceView(APIView):
+
+
+    def get(self, request, **kwargs):
+        for name, value in kwargs.items():
+            if name == 'film_id':
+                order = BookedPlace.objects.filter(film__id=value)
+                serializer = BookedPlaceSerializer(order, many=True)
+                return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+            elif name == 'id':
+                order = BookedPlace.objects.filter(author__id=value)
+                serializer = BookedPlaceSerializer(order, many=True)
+                return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    @csrf_exempt
+    def post(self, request):
+        post_data = request.POST.copy()
+        post_data['username'] = User.objects.get(username=post_data['username'])
+        post_data['film'] = Film.objects.get(id=post_data['film'])
+        BookedPlace.objects.create(film=post_data['film'], customer=post_data['username'], place=post_data['place'], row=post_data['row'])
+        return HttpResponse(status=status.HTTP_201_CREATED)
+

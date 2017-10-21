@@ -66,5 +66,7 @@ Dropzone.autoDiscover = false;
                   formData.append("title", $('input[name=title]').val());
                   formData.append("premiere_date", $('input[name=premiere_date]').val());
               });
-          },
+          }
         });
+
+

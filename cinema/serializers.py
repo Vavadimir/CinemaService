@@ -1,18 +1,22 @@
 from django.contrib.auth.models import User
-from .models import Film, Poster
+from .models import Film, Poster, BookedPlace
 from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
+    tickets = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('username', 'email','tickets')
 
 
 class FilmSerializer(serializers.ModelSerializer):
+    tickets = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Film
-        fields = ('id', 'title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price')
+        fields = ('id', 'title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price', 'tickets')
 
 
 class PosterSerializer(serializers.ModelSerializer):
@@ -28,6 +32,7 @@ class FilmListSerializer(serializers.Serializer):
     premiere_date = serializers.DateField()
     session_time = serializers.TimeField()
     film_duration = serializers.IntegerField()
+    tickets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     price = serializers.FloatField()
     poster = serializers.ImageField(default=None)
 
@@ -39,3 +44,9 @@ class FilmListSerializer(serializers.Serializer):
         except:
             serialized_data['poster'] = None
         return serialized_data
+
+
+class BookedPlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookedPlace
+        fields = ('place', 'row')

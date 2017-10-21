@@ -23,12 +23,16 @@ class Poster(models.Model):
 
 
 class BookedPlace(models.Model):
-    film = models.ForeignKey(Film)
-    author = models.ForeignKey(
+    film = models.ForeignKey(Film, related_name="tickets")
+    customer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        db_column="username",
+        db_column="customer",
+        related_name="tickets",
     )
     place = models.IntegerField()
     row = models.IntegerField()
+    booking_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return '%d %d' % (self.row, self.place)
