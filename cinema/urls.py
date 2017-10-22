@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 #from cinema.views import UserListAPIView, film_list, index, film_detail
-from cinema.views import index, UserListAPIView, admin_check, reg_form, FilmDetail, PosterList, FilmList, BookedPlaceView
+from cinema.views import index, UserListAPIView, admin_check, reg_form, FilmDetail, PosterList, FilmList, BookedPlaceView, FilmBookPage
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'user_bookings/film/(?P<film_id>[0-9]+)/', BookedPlaceView.as_view()),
     url(r'user_bookings/(?P<film_id>[0-9]+)/', BookedPlaceView.as_view()),
     url(r'user_bookings/', BookedPlaceView.as_view()),
+    url(r'(?P<id>[0-9]+)/', FilmBookPage.as_view()),
     url(r'film/(?P<id>[0-9]+)/', FilmDetail.as_view()),
     url(r'film/', FilmDetail.as_view()),
     url(r'poster/(?P<id>[0-9]+)/', PosterList.as_view()),

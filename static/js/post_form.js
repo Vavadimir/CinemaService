@@ -13,6 +13,7 @@ $(function() {
         textForm();
         setTimeout(function(){
             myDropzone.processQueue();
+            myDropzone.removeItem();
         }, 2000);
 
     });
@@ -49,6 +50,7 @@ function textForm(){
              success: function (response) {
                  console.log("OK");
                  console.log(response);
+                 $('#post_form').trigger('reset');
              },
              error: function() {
                  console.log("ERROR");
@@ -66,7 +68,11 @@ Dropzone.autoDiscover = false;
                   formData.append("title", $('input[name=title]').val());
                   formData.append("premiere_date", $('input[name=premiere_date]').val());
               });
+              this.on("complete", function(file){
+                  myDropzone.removeFile(file);
+              })
           }
         });
+
 
 

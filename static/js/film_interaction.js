@@ -19,13 +19,24 @@ $(function() {
                 '            <a href="#"><img class="card-img-top" src="media/' + resp[i]['poster'] + '" alt=""></a>\n' +
                 '            <div class="card-body">\n' +
                 '              <h4 class="card-title">\n' +
-                '                <a href="' + resp[i]['id'] + '/">' + resp[i]['title'] + '</a>\n' +
+                '                <a class="link_film" href="/' + resp[i]['id'] + '/">' + resp[i]['title'] + '</a>\n' +
                 '              </h4>\n' +
-                '              <p class="card-text"></p>\n' +
+                '              <p class="card-text">' +
+                '<p> Genre: ' + resp[i]['genre'] + '</p>'+
+                '<p> Premiere date: ' + resp[i]['premiere_date'] + '</p>'+
+                '<p> Session time: ' + resp[i]['session_time'] + '</p>'+
+                '<p> Price: ' + resp[i]['price'] + '</p>'+
+                '</p>\n' +
                 '            </div>\n' +
                 '          </div>\n'
 
             )
         }
    }
-})
+   $('.link_film').on('click', function (e) {
+       e.preventDefault();
+       $('#main-page').empty();
+       $('#main-page').append('<h1 class="my-4">'+ 1 +'</h1>');
+
+   });
+});

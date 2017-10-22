@@ -7,7 +7,7 @@ from cinema.serializers import UserSerializer, FilmSerializer, PosterSerializer,
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import jwt
 
@@ -23,7 +23,7 @@ class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
+@permission_classes((AllowAny, ))
 class FilmList(APIView):
 
     def get(self, request):
@@ -167,8 +167,16 @@ class BookedPlaceView(APIView):
     @csrf_exempt
     def post(self, request):
         post_data = request.POST.copy()
-        post_data['username'] = User.objects.get(username=post_data['username'])
-        post_data['film'] = Film.objects.get(id=post_data['film'])
-        BookedPlace.objects.create(film=post_data['film'], customer=post_data['username'], place=post_data['place'], row=post_data['row'])
+        print(post_data)
+        BookedPlace.objects.create(film=Film.objects.get(id=post_data['film']), customer=User.objects.get(username=request.POST['customer']), place=post_data['place'], row=post_data['row'])
         return HttpResponse(status=status.HTTP_201_CREATED)
+
+@permission_classes((AllowAny, ))
+class FilmBookPage(APIView):
+
+    def get(self, request, id):
+        film = Film.objects.get(id=id)
+        return render(request,'detail.html', {'film': film})
+
+
 
