@@ -31,7 +31,9 @@ Database models relations:
  - Film - one to many - Poster (foreign key)
 
 Database: PostgreSQL
+
 Frameworks: Django (with Django-REST)
+
 Front-end: without frameworks (jQuery)
  
  
