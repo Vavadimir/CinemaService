@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.utils.safestring import mark_safe
 
 
 class Film(models.Model):
@@ -20,6 +19,9 @@ class Poster(models.Model):
     film = models.ForeignKey(Film)
     pic = models.ImageField(upload_to='images/')
     is_main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.pic)
 
 
 class BookedPlace(models.Model):

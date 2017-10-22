@@ -39,17 +39,6 @@ $('#bookPlace').on('click', function(e){
 
 });
 
-    $.ajax({
-        url: '/1/',
-        type: 'GET',
-        cache: true,
-        success: function(response){
-            console.log('gg')
-        },
-        error: function(){
-            console.log('false')
-        }
-    });
 function createseating(){
 var k = 1;
  var seatingValue = [];

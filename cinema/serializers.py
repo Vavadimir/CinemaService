@@ -16,7 +16,8 @@ class FilmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Film
-        fields = ('id', 'title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price', 'tickets')
+        fields = ('id', 'title', 'description', 'genre', 'premiere_date', 'session_time', 'film_duration', 'price',
+                  'tickets')
 
 
 class PosterSerializer(serializers.ModelSerializer):
